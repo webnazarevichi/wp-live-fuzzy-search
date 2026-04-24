@@ -59,12 +59,10 @@ class WPLFS_Index_Builder {
 
             // URL Миниатюр для товаров
             $thumbnail_url = '';
-            $thumbnail_id  = get_post_thumbnail_id( $post->ID );
-            if ( $thumbnail_id ) {
-                $img = wp_get_attachment_image_src( $thumbnail_id, 'medium' );
-                if ( $img ) {
-                    $thumbnail_url = $img[0];
-                }
+            if ( $post->post_type === 'product' && function_exists( 'wc_placeholder_img_src' ) ) {
+                $thumbnail_url = has_post_thumbnail( $post->ID ) 
+                    ? get_the_post_thumbnail_url( $post->ID, $size ) 
+                    : wc_placeholder_img_src( $size );
             }
 
             // Цена для товаров
@@ -79,7 +77,6 @@ class WPLFS_Index_Builder {
             $index[] = [
                 'id'        => $post->ID,
                 'title'     => $post->post_title,
-                'excerpt'   => wp_strip_all_tags( $post->post_excerpt ),
                 'terms'     => array_values( array_unique( $taxonomy_terms ) ),
                 'phrases'   => self::get_extra_phrases( $post->ID ),
                 'url'       => get_permalink( $post->ID ),

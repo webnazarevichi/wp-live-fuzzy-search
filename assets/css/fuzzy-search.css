@@ -1,4 +1,4 @@
-.wplfs-search-box { position: relative; max-width: 600px; }
+.wplfs-search-box { position: relative; }
 #wplfs-input { width: 100%; padding: 12px 86px 12px 16px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; }
 .wplfs-input-actions { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 8px; z-index: 2; }
 .wplfs-clear-btn, .wplfs-search-btn { width: 28px; height: 28px; border: 0; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
@@ -8,7 +8,7 @@
 #wplfs-input:focus { outline: none; }
 #wplfs-results { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,.15); z-index: 9999; max-height: 420px; overflow-y: auto; display: none; }
 .wplfs-search-box.is-open #wplfs-results { display: block; }
-.fuzzy-result-item { display: flex; padding: 12px; gap: 12px; text-decoration: none; color: inherit; border-bottom: 1px solid #eee; }
+.fuzzy-result-item { display: flex; padding: 12px; gap: 12px; text-decoration: none; color: inherit; }
 .fuzzy-result-item:hover { background: #f8f9fa; }
 .fuzzy-more-btn { display: block; padding: 14px; text-align: center; font-weight: 600; color: #0073aa; text-decoration: none; }
 .wplfs-popular-box { padding: 12px; }
@@ -30,6 +30,9 @@
 .wplfs-result-item { padding: 20px; border-bottom: 1px solid #eee; }
 .wplfs-result-item a { text-decoration: none; color: #333; display: block; }
 .wplfs-result-item a:hover { color: #0073aa; }
+.wplfs-result-content { display: flex; gap: .625rem; }
+.wplfs-result-content-img { aspect-ratio: 1; }
+.wplfs-result-content-img img { width: 5rem; height: 5rem; object-fit: cover; }
 .wplfs-result-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
 .wplfs-result-excerpt { color: #666; line-height: 1.6; }
-.wplfs-result-type { display: inline-block; font-size: 12px; padding: 4px 8px; background: #f0f0f0; border-radius: 4px; margin-bottom: 8px; }
+.wplfs-result-type { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px; background: rgba(0,0,0,.15); }

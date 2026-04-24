@@ -65,8 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
             fuse = new Fuse(indexData, {
                 keys: [
                     { name: 'title', weight: 0.5 },
-                    { name: 'excerpt', weight: 0.25 },
-                    { name: 'content', weight: 0.15 },
                     { name: 'terms', weight: 0.07 },
                     { name: 'phrases', weight: 0.03 },
                 ],
@@ -98,17 +96,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const list = document.createElement('div');
         list.className = 'wplfs-results-list';
 
-        results.slice(0, 10).forEach(item => {
+        results.slice(0, 10).forEach(item => {  
+            const thumbHtml = item.thumb ? `
+                <div class="wplfs-result-content-img">
+                    <img src="${item.thumb}" 
+                        alt="${escapeHtml(item.title || '')}" 
+                        decoding="async" 
+                        loading="lazy">
+                </div>
+            ` : '';
             const a = document.createElement('a');
             a.href = item.url;
             a.className = 'fuzzy-result-item';
+            const typeBadge = item.type ? `<span class="wplfs-result-type wplfs-result-type-${item.type}">${escapeHtml(item.type)}</span>` : '';
             a.innerHTML = `
                 <div class="wplfs-result-content">
-                    <strong>${escapeHtml(item.title)}</strong>
-                    <small>${item.excerpt ? escapeHtml(item.excerpt.substring(0, 80)) + '...' : ''}</small>
+                    ${thumbHtml}
+                    <div class="wplfs-result-content-txt">
+                        <strong>${escapeHtml(item.title)}</strong>
+                        ${typeBadge}
+                    </div>
                 </div>
             `;
             list.appendChild(a);
+
         });
 
         if (results.length > 10) {
