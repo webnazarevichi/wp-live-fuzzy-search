@@ -170,6 +170,7 @@ class WP_Live_Fuzzy_Search {
 
         wp_localize_script( 'wplfs-fuzzy-search', 'wplfs', [
             'rest_url'    => rest_url( 'wp-live-fuzzy-search/v1/index' ),
+            'nonce'       => wp_create_nonce( 'wp_rest' ),
             'min_length'  => 2,
             'debounce_ms' => 500,
             'search_page_url' => home_url( '/' ),

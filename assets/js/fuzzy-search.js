@@ -53,11 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const loadIndex = async () => {
-        if (indexData || isLoading) return;
+        if (indexData || isLoading) return indexData;
         isLoading = true;
 
         try {
-            const response = await fetch(wplfs.rest_url);
+            const response = await fetch(wplfs.rest_url, {
+                headers: {
+                    'X-WP-Nonce': wplfs.nonce
+                }
+            });
             if (!response.ok) throw new Error('Failed to load index');
 
             indexData = await response.json();
@@ -80,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             isLoading = false;
         }
+        return indexData;
     };
 
     const displayDropdownResults = (results) => {
@@ -128,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.appendChild(list);
 
-        if (results.length > 4) {
+        if (results.length > 10) {
             const moreLink = document.createElement('a');
             // Используем полный набор ID для search page.
             moreLink.href = buildSearchUrl(input.value, getPostIds(results));
@@ -221,10 +226,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (dropdownResults) {
-            timeout = setTimeout(() => {
+            timeout = setTimeout(async () => {
+                if (!indexData && isLoading) {
+                    await loadIndex();
+                }
                 const items = performSearch(query);
                 displayDropdownResults(items);
-            }, 350);
+            }, wplfs.debounce_ms || 350);
         }
         syncActionButtons();
     });
@@ -236,12 +244,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (wrapper && !wrapper.contains(e.target)) {
-                dropdownResults.innerHTML = '';
                 wrapper.classList.remove('is-open');
             }
         });
 
         input.addEventListener('focus', () => {
+            loadIndex();
             if (!input.value.trim() && ui.hasPopularQueries) {
                 renderPopularQueries();
             } else if (input.value.trim().length < 2) {
@@ -256,7 +264,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && wrapper) {
-                dropdownResults.innerHTML = '';
                 wrapper.classList.remove('is-open');
             }
         });
@@ -286,5 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    loadIndex();
+    // Предзагрузка при наведении или касании (для мобильных)
+    if (wrapper) {
+        wrapper.addEventListener('mouseenter', loadIndex, { once: true });
+        wrapper.addEventListener('touchstart', loadIndex, { once: true, passive: true });
+    }
 });
