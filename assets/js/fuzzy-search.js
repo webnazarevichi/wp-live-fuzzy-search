@@ -93,6 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const container = document.createElement('div');
+        container.className = 'wplfs-results-container';
+
         const list = document.createElement('div');
         list.className = 'wplfs-results-list';
 
@@ -105,15 +108,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         loading="lazy">
                 </div>
             ` : '';
+            const typeBadge = item.type ? `<span class="wplfs-result-type wplfs-result-type-${item.type}">${escapeHtml(item.type)}</span>` : '';
+
             const a = document.createElement('a');
             a.href = item.url;
-            a.className = 'fuzzy-result-item';
-            const typeBadge = item.type ? `<span class="wplfs-result-type wplfs-result-type-${item.type}">${escapeHtml(item.type)}</span>` : '';
+            a.className = 'wplfs-result-item';
             a.innerHTML = `
                 <div class="wplfs-result-content">
                     ${thumbHtml}
                     <div class="wplfs-result-content-txt">
-                        <strong>${escapeHtml(item.title)}</strong>
+                        <span class="wplfs-result-content-title">${escapeHtml(item.title)}</span>
                         ${typeBadge}
                     </div>
                 </div>
@@ -122,16 +126,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         });
 
-        if (results.length > 10) {
+        container.appendChild(list);
+
+        if (results.length > 4) {
             const moreLink = document.createElement('a');
             // Используем полный набор ID для search page.
             moreLink.href = buildSearchUrl(input.value, getPostIds(results));
-            moreLink.className = 'fuzzy-more-btn';
+            moreLink.className = 'wplfs-more-btn';
             moreLink.textContent = `${ui.allResultsText} (${results.length}) →`;
-            list.appendChild(moreLink);
+            container.appendChild(moreLink);
         }
 
-        dropdownResults.appendChild(list);
+        dropdownResults.appendChild(container);
     };
 
     const performSearch = (query) => {
