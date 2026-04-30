@@ -59,10 +59,18 @@ class WPLFS_Index_Builder {
 
             // URL Миниатюр для товаров
             $thumbnail_url = '';
-            if ( $post->post_type === 'product' && function_exists( 'wc_placeholder_img_src' ) ) {
-                $thumbnail_url = has_post_thumbnail( $post->ID ) 
-                    ? get_the_post_thumbnail_url( $post->ID, $size ) 
-                    : wc_placeholder_img_src( $size );
+            if ( $post->post_type === 'product' && function_exists( 'wc_get_product' ) ) {
+                $product = wc_get_product( $post->ID );
+                if ( $product ) {
+                    $image_id = $product->get_image_id();
+                    if ( $image_id ) {
+                        $image_src = wp_get_attachment_image_src( $image_id, 'medium' );
+                        $thumbnail_url = $image_src ? $image_src[0] : '';
+                    }
+                    if ( ! $thumbnail_url ) {
+                        $thumbnail_url = wc_placeholder_img_src( 'medium' );
+                    }
+                }
             }
 
             // Цена для товаров
