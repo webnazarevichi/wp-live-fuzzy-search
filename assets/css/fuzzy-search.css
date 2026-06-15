@@ -228,3 +228,10 @@
     border-radius: 0.375em;
     background: var(--wplfs-result-item-type-bg);
 }
+
+.wplfs-result-price {
+    display: block;
+    font-size: 112%;
+    font-weight: 700;
+    margin-top: .625rem;
+}

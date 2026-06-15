@@ -109,11 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="wplfs-result-content-img">
                     <img src="${item.thumb}" 
                         alt="${escapeHtml(item.title || '')}" 
-                        decoding="async" 
-                        loading="lazy">
+                        decoding="async">
                 </div>
             ` : '';
             const typeBadge = item.type ? `<span class="wplfs-result-type wplfs-result-type-${item.type}">${escapeHtml(item.type)}</span>` : '';
+            const priceHtml = item.price ? `<span class="wplfs-result-price">${item.price}</span>` : '';
 
             const a = document.createElement('a');
             a.href = item.url;
@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="wplfs-result-content-txt">
                         <span class="wplfs-result-content-title">${escapeHtml(item.title)}</span>
                         ${typeBadge}
+                        ${priceHtml}
                     </div>
                 </div>
             `;
